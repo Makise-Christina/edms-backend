@@ -18,7 +18,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/edmsSQL?useSSL=false&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
     username: root
-    password: 123456
+    password: abcd@1234
   jpa:
     show-sql: false
     hibernate:
@@ -37,7 +37,7 @@ spring:
     database: 0
 
 server:
-  port: 8888
+  port: 9770
 
 file:
   static: /static/

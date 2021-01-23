@@ -1,55 +1,38 @@
+
 DROP DATABASE IF EXISTS edmsSQL;
 CREATE DATABASE edmsSQL DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
 use edmsSQL;
 
+-- 01 用户
 CREATE TABLE user (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
     `gmt_create` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `gmt_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+
+    `login_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '上次登录时间',
 
     `uuid` CHAR(32) NOT NULL COMMENT '全局id',
-    `user_name` CHAR(32) NOT NULL COMMENT '用户名',
-
-    `name` CHAR(32) NOT NULL COMMENT '姓名',
     `role` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户类别 0UNKNOWN 1ADMIN 2WORKER',
     `gender` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户性别 0UNKNOWN 1MALE 2FEMALE',
-    `email` VARCHAR(64) COMMENT '邮箱',
-    `mobile` CHAR(32) COMMENT '电话',
-    `salt` VARCHAR(32) NOT NULL COMMENT '密码加盐',
-    `password` VARCHAR(255) NOT NULL COMMENT '密码',
-
+    `name` CHAR(20) NOT NULL COMMENT '姓名',
+    `email` VARCHAR(50) NOT NULL COMMENT '邮箱',
+    `mobile` CHAR(20) NOT NULL COMMENT '手机号',
+    `mobile_prefix` CHAR(8) NOT NULL COMMENT '手机区号',
+    `password` CHAR(255) NOT NULL COMMENT '密码',
+    `salt` CHAR(32) NOT NULL COMMENT '密码加盐',
     `position` VARCHAR(32) DEFAULT '' COMMENT '职位',
     `company` VARCHAR(64) DEFAULT '' COMMENT '公司',
     `address` VARCHAR(128) DEFAULT '' COMMENT '地址',
-    `department_id` BIGINT UNSIGNED DEFAULT 0 COMMENT '所属部门id',
 
-    `locked` TINYINT UNSIGNED DEFAULT 0 COMMENT '是否冻结',
-    `login_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '上次登录时间',
+    `department_id` BIGINT UNSIGNED DEFAULT 0 COMMENT '所属部门id',
 
     PRIMARY KEY (`id`),
 
-    UNIQUE KEY `uk_uuid` (`uuid`),
-    UNIQUE KEY `uk_user_name` (`user_name`),
+    UNIQUE KEY `uk_user_id` (`uuid`),
     UNIQUE KEY `uk_email` (`email`),
     UNIQUE KEY `uk_mobile` (`mobile`)
 
 )ENGINE=InnoDB COMMENT='用户';
-
-INSERT INTO user (
-    `uuid`,
-    `user_name`,
-    `name`,
-    `role`,
-    `salt`,
-    `password`
-)
-VALUES (
-    'abcd@1234',
-    'test_user_01',
-    'test_user_01',
-    1,
-    'abcd@12341234',
-    'abcd@1234'
-);
 
 -- 02 部门
 CREATE TABLE department (
@@ -89,11 +72,11 @@ CREATE TABLE elder (
     `picture` TEXT COMMENT '照片base64', 
 
     `building_id` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '楼',
-    `floor_id` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '层',
-    `room_id` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '房',
-    `bed_id` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '床',
+    'floor_id' BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '层',
+    'room_id' BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '房',
+    'bed_id' BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '床'
 
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
     
 )ENGINE=InnoDB COMMENT='客户老人对象';
 
@@ -111,7 +94,7 @@ CREATE TABLE elder_contact (
 
     `elder_id` BIGINT UNSIGNED NOT NULL COMMENT '关联老人id',
 
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
 )ENGINE=InnoDB COMMENT='老人联系人';
 
 -- 05 楼
@@ -122,7 +105,7 @@ CREATE TABLE building (
 
     `name` CHAR(20) NOT NULL COMMENT '楼名称',
 
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
 )ENGINE=InnoDB COMMENT='楼';
 
 -- 06 楼层
@@ -135,7 +118,7 @@ CREATE TABLE floor (
 
     `building_id` BIGINT UNSIGNED NOT NULL COMMENT '所属楼id',
 
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
 )ENGINE=InnoDB COMMENT='楼层';
 
 -- 07 房间
@@ -148,7 +131,7 @@ CREATE TABLE room (
 
     `floor_id` BIGINT UNSIGNED NOT NULL COMMENT '所属楼层id',
 
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
 )ENGINE=InnoDB COMMENT='房间';
 
 -- 08 床位
@@ -246,8 +229,8 @@ CREATE TABLE activity_register (
     `gmt_create` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `gmt_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
 
-    `activity_id` BIGINT UNSIGNED NOT NULL COMMENT '活动',
-    `participant_id` BIGINT UNSIGNED NOT NULL COMMENT '参与人员',
+    `activity_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '活动',
+    `participant_id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '参与人员',
 
      PRIMARY KEY (`id`)
 )ENGINE=InnoDB COMMENT='活动报名记录';

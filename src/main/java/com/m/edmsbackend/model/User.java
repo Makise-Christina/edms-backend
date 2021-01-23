@@ -24,12 +24,18 @@ public class User {
     private String uuid;
     private String userName;
     private String name;
-    private Integer type;
+    private Integer role;
+    private Integer gender;
     private String email;
     private String mobile;
     private String password;
     private String salt;
+
+    private String position;
+    private String company;
+    private String address;
+    private Long departmentId;
+
     private Boolean locked;
     private Date loginTime;
-    
 }

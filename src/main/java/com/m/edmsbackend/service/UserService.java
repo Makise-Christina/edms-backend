@@ -73,11 +73,11 @@ public class UserService {
         return result;
     }
 
-    public List<UserDto> findUsers(Integer type) {
+    public List<UserDto> findUsers(Integer role) {
         List<UserDto> result = new ArrayList<>();
         List<User> dataRs = new ArrayList<>();
         User example = new User();
-        example.setType(type);
+        example.setRole(role);
         dataRs = userRepository.findAll(Example.of(example));
 
         for (int i = 0; i < dataRs.size(); i++) {
@@ -105,8 +105,8 @@ public class UserService {
         if (user.getUserName() != null) {
             dataIn.setUserName(user.getUserName());
         }
-        if (user.getType() != null) {
-            dataIn.setType(user.getType());
+        if (user.getRole() != null) {
+            dataIn.setRole(user.getRole());
         }
         if (user.getMobile() != null) {
             dataIn.setMobile(user.getMobile());
@@ -157,7 +157,7 @@ public class UserService {
         result.setLastLoginTime(user.getLoginTime());
 
         // 更新token
-        String token = JwtUtils.createJWT(user.getUuid(), user.getType());
+        String token = JwtUtils.createJWT(user.getUuid(), user.getRole());
         result.setToken(token);
         this.setToken(user.getUuid(), token);
 
