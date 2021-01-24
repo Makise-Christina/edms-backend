@@ -164,6 +164,42 @@ CREATE TABLE bed (
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB COMMENT='床位';
 
+INSERT INTO building (`id`, `name`) VALUES (1, 'A楼');
+INSERT INTO building (`id`, `name`) VALUES (2, 'B楼');
+INSERT INTO building (`id`, `name`) VALUES (3, 'C楼');
+
+INSERT INTO floor (`id`, `name`, `building_id`) VALUES (11, 'A1', 1);
+INSERT INTO floor (`id`, `name`, `building_id`) VALUES (12, 'A2', 1);
+INSERT INTO floor (`id`, `name`, `building_id`) VALUES (21, 'B1', 2);
+INSERT INTO floor (`id`, `name`, `building_id`) VALUES (22, 'B2', 2);
+INSERT INTO floor (`id`, `name`, `building_id`) VALUES (23, 'B3', 2);
+INSERT INTO floor (`id`, `name`, `building_id`) VALUES (31, 'C1', 3);
+
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (1101, 'A101', 11);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (1102, 'A102', 11);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (1201, 'A201', 12);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (1202, 'A202', 12);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (2101, 'B101', 21);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (2201, 'B201', 22);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (2301, 'B301', 23);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (3101, 'C101', 31);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (3102, 'C102', 31);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (3103, 'C103', 31);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (3104, 'C104', 31);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (3105, 'C105', 31);
+INSERT INTO room (`id`, `name`, `floor_id`) VALUES (3106, 'C106', 31);
+
+INSERT INTO bed (`id`, `name`, `room_id`) VALUES (110101,'A101-1号床',1101);
+INSERT INTO bed (`id`, `name`, `room_id`) VALUES (110102,'A101-2号床',1101);
+INSERT INTO bed (`id`, `name`, `room_id`) VALUES (110103,'A101-3号床',1101);
+INSERT INTO bed (`id`, `name`, `room_id`) VALUES (110201,'A102-1号床',1102);
+INSERT INTO bed (`id`, `name`, `room_id`) VALUES (120101,'A201-1号床',1201);
+INSERT INTO bed (`id`, `name`, `room_id`) VALUES (120201,'A202-1号床',1202);
+INSERT INTO bed (`id`, `name`, `room_id`) VALUES (210101,'B101-1号床',2101);
+INSERT INTO bed (`id`, `name`, `room_id`) VALUES (310101,'C101-1号床',3101);
+INSERT INTO bed (`id`, `name`, `room_id`) VALUES (310102,'C101-2号床',3101);
+INSERT INTO bed (`id`, `name`, `room_id`) VALUES (310103,'C101-3号床',3101);
+
 -- 09 健康记录
 CREATE TABLE nursing_record (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
