@@ -10,43 +10,48 @@ import java.io.Serializable;
  * Json的标准输出格式
  * @param <T>
  */
-public class StdResult<T> implements Serializable
+public class StdResult implements Serializable
 {
 
     private static final long serialVersionUID = -3373951637251223076L;
-    private int status;
+    private boolean success;
     private String message;
-    private T data;
+    private JSONObject data;
 
-    public StdResult(StdStatus statEnum, T data)
+    public static JSONObject genResult(boolean success, JSONObject data)
     {
-        this.status = statEnum.getStatus();
-        this.message = statEnum.getStatusInfo();
+        data.put("success", success);
+        data.put("message", null);
+        return data;
+    }
+
+    public StdResult(boolean success, JSONObject data)
+    {
+        this.success = success;
+        this.message = null;
         this.data = data;
     }
 
     public String toJsonString(){
-        JSONObject json = new JSONObject();
-        json.put("status", status);
+        JSONObject json = data;
+        json.put("success", true);
         json.put("message", message);
-        json.put("data",data);
         return json.toJSONString();
     }
 
     public Object toJson(){
-        JSONObject json = new JSONObject();
-        json.put("status", status);
+        JSONObject json = data;
+        json.put("success", true);
         json.put("message", message);
-        json.put("data",data);
         return json;
     }
 
-    public int getStatus() {
-        return status;
+    public boolean getSuccss() {
+        return success;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setStatus(boolean success) {
+        this.success = success;
     }
 
     public String getMessage()
@@ -59,12 +64,12 @@ public class StdResult<T> implements Serializable
         this.message = message;
     }
 
-    public Object getData()
+    public JSONObject getData()
     {
         return data;
     }
 
-    public void setData(T data)
+    public void setData(JSONObject data)
     {
         this.data = data;
     }

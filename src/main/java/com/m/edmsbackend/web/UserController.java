@@ -20,43 +20,53 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
+
 @RestController
 public class UserController {
     @Resource
     private UserService userService;
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public StdResult<List<UserDto>> getUsers(
+    public JSONObject getUsers(
             @RequestParam(required = false) Integer type) {
         List<UserDto> result = userService.findUsers(type);
-        return new StdResult<List<UserDto>>(StdStatus.STATUS_200, result);
+        JSONObject json = new JSONObject();
+        json.put("users", result);
+        return StdResult.genResult(true, json);
     }
 
     @Transactional
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public StdResult<Long> addUser(@RequestBody UserDto user) {
+    public JSONObject addUser(@RequestBody UserDto user) {
         Long id = userService.addUser(user);
-        return new StdResult<Long>(StdStatus.STATUS_200, id);
+        JSONObject json = new JSONObject();
+        json.put("user_id", id);
+        return StdResult.genResult(true, json);
     }
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
-    public StdResult<UserDto> getUser(@PathVariable Long userId) {
+    public JSONObject getUser(@PathVariable Long userId) {
         UserDto result = userService.getUser(userId);
-        return new StdResult<UserDto>(StdStatus.STATUS_200, result);
+        JSONObject json = new JSONObject();
+        json.put("user", result);
+        return StdResult.genResult(true, json);
     }
 
     @Transactional
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT)
-    public StdResult<Boolean> changeUser(@PathVariable Long userId, @RequestBody UserDto user) {
+    public JSONObject changeUser(@PathVariable Long userId, @RequestBody UserDto user) {
         Boolean result = userService.changeUser(userId, user);
-        return new StdResult<Boolean>(StdStatus.STATUS_200, result);
+        JSONObject json = new JSONObject();
+        return StdResult.genResult(result, json);
     }
 
     @Transactional
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
-    public StdResult<Boolean> deleteUsers(@PathVariable Long userId) {
+    public JSONObject deleteUsers(@PathVariable Long userId) {
         Boolean result = userService.deleteUsers(userId);
-        return new StdResult<Boolean>(StdStatus.STATUS_200, result);
+        JSONObject json = new JSONObject();
+        return StdResult.genResult(result, json);
     }
 
     /**
@@ -67,30 +77,34 @@ public class UserController {
      */
     @Transactional
     @RequestMapping(value = "/users/login", method = RequestMethod.POST)
-    public StdResult<UserDto> userLogin(@RequestBody UserDto user) {
+    public JSONObject userLogin(@RequestBody UserDto user) {
         // 查找用户
         if (user.getUsername() == null || user.getPassword() == null) {
-            throw new LoginException();
+            return StdResult.genResult(false, new JSONObject());
         }
         UserDto res = userService.getUserByLogin(user.getUsername(), user.getPassword());
-        return new StdResult<UserDto>(StdStatus.STATUS_200, res);
+        JSONObject json = new JSONObject();
+        json.put("user", res);
+        return StdResult.genResult(true, json);
     }
 
     /**
      * 验证是否登录
      */
     @RequestMapping(value = "/users/check-login", method = RequestMethod.GET)
-    public StdResult<UserDto> getUsersCheckLogin(HttpServletRequest request) {
+    public JSONObject getUsersCheckLogin(HttpServletRequest request) {
         Long userId = userService.uuid2id((String) request.getAttribute("uuid"));
         if (userId == null) {
-            throw new AuthorizationException();
+            return StdResult.genResult(false, new JSONObject());
         }
         UserDto result = userService.getUser(userId);
         if (result.getIsBlock()) {
-            throw new AuthorizationException();
+            return StdResult.genResult(false, new JSONObject());
         }
         userService.updateUserLoginTime(userId);
-        return new StdResult<UserDto>(StdStatus.STATUS_200, result);
+        JSONObject json = new JSONObject();
+        json.put("user", result);
+        return StdResult.genResult(true, json);
     }
 
     /**
@@ -98,10 +112,10 @@ public class UserController {
      */
     @Transactional
     @RequestMapping(value = "/users/password", method = RequestMethod.POST)
-    public StdResult<Boolean> modifyUserPassword(@RequestParam Long userId, @RequestParam String password,
+    public JSONObject modifyUserPassword(@RequestParam Long userId, @RequestParam String password,
             @RequestParam String new_password) {
         Boolean res = userService.updateUserPassword(userId, password, new_password);
-        return new StdResult<Boolean>(StdStatus.STATUS_200, res);
+        return StdResult.genResult(res, new JSONObject());
     }
 
 }
