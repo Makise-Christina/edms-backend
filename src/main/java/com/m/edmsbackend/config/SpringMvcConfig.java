@@ -69,7 +69,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
         ObjectMapper om = converter.getObjectMapper();
         om.setSerializationInclusion(JsonInclude.Include.ALWAYS);// 配置 NULL&空 是否序列化
-        om.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);// json数据对象采用下划线命名法\
+        // om.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);// json数据对象采用下划线命名法\
         // om.setTimeZone(TimeZone.getTimeZone("GMT+8"));//设置默认接收时区，若传进来的时间和存储时间不一致，调整该参数
         // 反序列化配置
         om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);// json中含pojo不存在属性时是否失败报错,默认true

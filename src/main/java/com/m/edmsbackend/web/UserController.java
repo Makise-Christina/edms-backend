@@ -45,7 +45,7 @@ public class UserController {
     //     return StdResult.genResult(true, json);
     // }
 
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     public JSONObject getUser(@RequestParam Long userId) {
         UserDto result = userService.getUser(userId);
         JSONObject json = new JSONObject();
@@ -76,7 +76,7 @@ public class UserController {
      * @return
      */
     @Transactional
-    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     public JSONObject userLogin(@RequestBody UserDto user) {
         // 查找用户
         if (user.getUsername() == null || user.getPassword() == null) {
