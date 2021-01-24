@@ -47,8 +47,8 @@ VALUES (
     'test_user_01',
     'test_user_01',
     1,
-    'abcd@12341234',
-    'abcd@1234'
+    'PHJMBYkR6LGik/BzZkhJ',
+    '25e29ee799820aaa8b6e8298e7aacc40'
 );
 
 -- 02 部门
