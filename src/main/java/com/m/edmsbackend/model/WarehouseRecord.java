@@ -12,14 +12,18 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import lombok.Data;
 
-@Entity(name = "building")
+@Entity(name = "warehouse_record")
 @Data
 @DynamicUpdate
 @DynamicInsert
-public class Building {
+public class WarehouseRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private Date gmtCreate;
+
+    private Long itemId;
+    private Integer type;
+    private Integer quantity;
     private Long workerId;
 }

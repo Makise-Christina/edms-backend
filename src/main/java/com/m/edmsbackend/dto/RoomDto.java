@@ -9,5 +9,5 @@ import lombok.Data;
 
 @Data
 public class RoomDto extends Room {
-    List<BedDto> bedList;
+    private List<BedDto> bedList;
 }

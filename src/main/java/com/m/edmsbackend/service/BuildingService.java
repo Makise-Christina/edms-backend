@@ -90,6 +90,19 @@ public class BuildingService {
         return buildingsResult;
     }
 
+    public List<BuildingDto> findBuildings()
+    {
+        List<BuildingDto> result = new ArrayList<>();
+        List<Building> buildings = buildingRepository.findAll();
+        for (Building building : buildings)
+        {
+            BuildingDto buildingDto = new BuildingDto();
+            DataUtils.copyProperties(building, buildingDto);
+            result.add(buildingDto);
+        }
+        return result;
+    }
+
     public String findBuildingName(Long buildingId) {
         Building building = buildingRepository.findBuildingById(buildingId);
         if (building != null){
@@ -121,6 +134,48 @@ public class BuildingService {
             return bed.getName();
         }
         return null;
+    }
+
+    public Integer countTotalBeds(Long buildingId) {
+        Integer result = 0;
+        List<FloorDto> floorDtos = new ArrayList<>();
+        // loop all floor
+        List<Floor> floors = floorRepository.findFloorByBuildingId(buildingId);
+        for (Floor floor : floors) {
+            Long floorId = floor.getId();
+            List<RoomDto> roomDtos = new ArrayList<>();
+            // loop all room
+            List<Room> rooms = roomRepository.findRoomsByFloorId(floorId);
+            for(Room room : rooms) {
+                Long roomId = room.getId();
+                List<BedDto> bedDtos = new ArrayList<>();
+                // get available beds
+                List<Bed> beds = bedRepository.findBedByRoomId(roomId);
+                result = result + beds.size();
+            }
+        }
+        return result;
+    }
+
+    public Integer countUsedBeds(Long buildingId) {
+        Integer result = 0;
+        List<FloorDto> floorDtos = new ArrayList<>();
+        // loop all floor
+        List<Floor> floors = floorRepository.findFloorByBuildingId(buildingId);
+        for (Floor floor : floors) {
+            Long floorId = floor.getId();
+            List<RoomDto> roomDtos = new ArrayList<>();
+            // loop all room
+            List<Room> rooms = roomRepository.findRoomsByFloorId(floorId);
+            for(Room room : rooms) {
+                Long roomId = room.getId();
+                List<BedDto> bedDtos = new ArrayList<>();
+                // get available beds
+                List<Bed> beds = bedRepository.findBedUsedByRoomId(roomId);
+                result = result + beds.size();
+            }
+        }
+        return result;
     }
 }
 

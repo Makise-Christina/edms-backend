@@ -121,6 +121,7 @@ CREATE TABLE building (
     `gmt_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
 
     `name` CHAR(20) NOT NULL COMMENT '楼名称',
+    `worker_id` BIGINT UNSIGNED NOT NULL COMMENT '负责人id',
 
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB COMMENT='楼';
@@ -164,9 +165,9 @@ CREATE TABLE bed (
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB COMMENT='床位';
 
-INSERT INTO building (`id`, `name`) VALUES (1, 'A楼');
-INSERT INTO building (`id`, `name`) VALUES (2, 'B楼');
-INSERT INTO building (`id`, `name`) VALUES (3, 'C楼');
+INSERT INTO building (`id`, `name`, `worker_id`) VALUES (1, 'A楼', 1);
+INSERT INTO building (`id`, `name`, `worker_id`) VALUES (2, 'B楼', 1);
+INSERT INTO building (`id`, `name`, `worker_id`) VALUES (3, 'C楼', 1);
 
 INSERT INTO floor (`id`, `name`, `building_id`) VALUES (11, 'A1', 1);
 INSERT INTO floor (`id`, `name`, `building_id`) VALUES (12, 'A2', 1);
@@ -225,7 +226,7 @@ CREATE TABLE access_record (
     `name` CHAR(20) NOT NULL COMMENT '人员姓名',
     `type` TINYINT UNSIGNED NOT NULL COMMENT '进出状态 0进 1出',
     `reason` VARCHAR(128) DEFAULT '' COMMENT '事由',
-    `work_id` BIGINT UNSIGNED DEFAULT 0 COMMENT '创建者ID',
+    `worker_id` BIGINT UNSIGNED DEFAULT 0 COMMENT '创建者ID',
     `status` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '状态 0PENDING 1IN_PROGRESS 2FINISHED 3CANCELED',
 
     PRIMARY KEY (`id`)

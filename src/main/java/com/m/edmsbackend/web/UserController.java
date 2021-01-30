@@ -1,5 +1,6 @@
 package com.m.edmsbackend.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -27,14 +28,22 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    // @RequestMapping(value = "/users", method = RequestMethod.GET)
-    // public JSONObject getUsers(
-    //         @RequestParam(required = false) Integer type) {
-    //     List<UserDto> result = userService.findUsers(type);
-    //     JSONObject json = new JSONObject();
-    //     json.put("users", result);
-    //     return StdResult.genResult(true, json);
-    // }
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public JSONObject getUsers(
+            @RequestParam(required = false) List<Long> idList) {
+        List<UserDto> result = new ArrayList<>();
+        for (Long userId: idList)
+        {
+            UserDto userDto = userService.getUser(userId);
+            if (userDto.getId() != null)
+            {
+                result.add(userDto);
+            }
+        }
+        JSONObject json = new JSONObject();
+        json.put("userList", result);
+        return StdResult.genResult(true, json);
+    }
 
     // @Transactional
     // @RequestMapping(value = "/users_add", method = RequestMethod.POST)
@@ -45,12 +54,18 @@ public class UserController {
     //     return StdResult.genResult(true, json);
     // }
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public JSONObject getUser(@RequestParam Long userId) {
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+    public JSONObject getUser(@PathVariable Long userId) {
         UserDto result = userService.getUser(userId);
         JSONObject json = new JSONObject();
         json.put("user", result);
-        return StdResult.genResult(true, json);
+        if (result.getId() != null){
+            return StdResult.genResult(true, json);
+        } 
+        else {
+            return StdResult.genResult(false, json);
+        }
+        
     }
 
     // @Transactional

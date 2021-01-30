@@ -31,4 +31,7 @@ public interface IElderRepository extends JpaRepository<Elder, Long> {
 
     @Query(value = "select * from elder where age >= ?1 and age <= ?2", nativeQuery = true)
     List<Elder> findEldersByAge(Integer startAge, Integer endAge);
+
+    @Query(value = "select * from elder where building_id = ?1", nativeQuery = true)
+    List<Elder> findEldersByBuildingId(Long buildingId);
 }

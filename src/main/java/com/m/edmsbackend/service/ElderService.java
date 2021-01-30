@@ -160,4 +160,26 @@ public class ElderService {
         contactRepository.deleteContactsByElderId(elderId);
         elderRepository.deleteById(elderId);
     }
+
+    public List<ElderDto> getEldersByBuildingId(Long buildingId)
+    {
+        List<ElderDto> result = new ArrayList<>();
+        List<Elder> dataRs = elderRepository.findEldersByBuildingId(buildingId);
+        for (Elder elder : dataRs){
+            ElderDto elderDto = new ElderDto();
+            DataUtils.copyProperties(elder, elderDto);
+
+            //add contact list
+            List<ContactDto> contactList = new ArrayList<>();
+            List<Contact> contacts = contactRepository.findContactsByElderId(elderDto.getId());
+            for (Contact contact : contacts) {
+                ContactDto contactDto = new ContactDto();
+                DataUtils.copyProperties(contact, contactDto);
+                contactList.add(contactDto);
+            }
+            elderDto.setContactList(contactList);
+            result.add(elderDto);
+        }
+        return result;
+    }
 }

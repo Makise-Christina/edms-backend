@@ -13,6 +13,12 @@ public interface IBedRepository extends JpaRepository<Bed, Long> {
     @Query(value = "select * from bed where room_id = ?1 and id not in (select bed_id from elder group by bed_id)", nativeQuery = true)
     List<Bed> findBedNotUsedByRoomId(Long roomId);
 
+    @Query(value = "select * from bed where room_id = ?1 and id in (select bed_id from elder group by bed_id)", nativeQuery = true)
+    List<Bed> findBedUsedByRoomId(Long roomId);
+
+    @Query(value = "select * from bed where room_id = ?1", nativeQuery = true)
+    List<Bed> findBedByRoomId(Long roomId);
+
     @Query(value = "select * from bed where id not in (select bed_id from elder group by bed_id)", nativeQuery = true)
     List<Bed> findBedNotUsed();
 

@@ -6,10 +6,14 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import com.m.edmsbackend.dto.BuildingDto;
+import com.m.edmsbackend.dto.ElderDto;
+import com.m.edmsbackend.dto.UserDto;
 import com.m.edmsbackend.enums.StdStatus;
 import com.m.edmsbackend.exception.AuthorizationException;
 import com.m.edmsbackend.exception.LoginException;
 import com.m.edmsbackend.service.BuildingService;
+import com.m.edmsbackend.service.ElderService;
+import com.m.edmsbackend.service.UserService;
 import com.m.edmsbackend.utils.StdResult;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +25,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONArray;
 
 @RestController
 public class BuildingController {
     @Resource
     private BuildingService buildingService;
+    @Resource
+    private ElderService elderService;
+    @Resource
+    private UserService userService;
 
     @RequestMapping(value = "/building/available", method = RequestMethod.GET)
     public JSONObject getBuildingAvailableInfos() {
@@ -63,6 +72,39 @@ public class BuildingController {
         json.put("floorName", floorName);
         json.put("roomName", roomName);
         json.put("bedName", bedName);
+        return StdResult.genResult(true, json);
+    }
+
+    @RequestMapping(value = "/building/{buildingId}/elder", method = RequestMethod.GET)
+    public JSONObject getBuildingElders(@PathVariable Long buildingId) {
+        List<ElderDto> result = elderService.getEldersByBuildingId(buildingId);
+        JSONObject json = new JSONObject();
+        json.put("elderList", result);
+        return StdResult.genResult(true, json);
+    }
+
+    @RequestMapping(value = "/building/statistics", method = RequestMethod.GET)
+    public JSONObject getBuildingStatistics() {
+        JSONArray buildingStatistics = new JSONArray();
+        List<BuildingDto> result = buildingService.findBuildings();
+        for (BuildingDto buildingDto : result)
+        {
+            JSONObject bs = new JSONObject();
+            Long workerId = buildingDto.getWorkerId();
+            Long buildingId = buildingDto.getId();
+            UserDto userDto = userService.getUser(workerId);
+            Integer totalBeds = buildingService.countTotalBeds(buildingId);
+            Integer usedBeds = buildingService.countUsedBeds(buildingId);
+            bs.put("buildingId", buildingDto.getId());
+            bs.put("buildingName", buildingDto.getName());
+            bs.put("totalBeds", totalBeds);
+            bs.put("usedBeds", usedBeds);
+            bs.put("workerId", workerId);
+            bs.put("workerName", userDto.getName());
+            buildingStatistics.add(bs);
+        }
+        JSONObject json = new JSONObject();
+        json.put("buildingStatList", buildingStatistics);
         return StdResult.genResult(true, json);
     }
 }
