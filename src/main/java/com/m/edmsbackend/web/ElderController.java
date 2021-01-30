@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
 
 @RestController
 public class ElderController {
@@ -29,7 +30,9 @@ public class ElderController {
 
     @Transactional
     @RequestMapping(value = "/elder", method = RequestMethod.POST)
-    public JSONObject addElder(@RequestBody ElderDto elder) {
+    public JSONObject addElder(@RequestBody JSONObject dataIn) {
+        JSONObject elderJson = dataIn.getJSONObject("elder");
+        ElderDto elder = JSON.toJavaObject(elderJson, ElderDto.class);
         ElderDto res = elderService.addElder(elder);
         JSONObject json = new JSONObject();
         json.put("elder", res);
@@ -62,7 +65,9 @@ public class ElderController {
 
     @Transactional
     @RequestMapping(value = "/elder/{elderId}", method = RequestMethod.PUT)
-    public JSONObject modifyElder(@PathVariable Long elderId, @RequestBody ElderDto elder) {
+    public JSONObject modifyElder(@PathVariable Long elderId, @RequestBody JSONObject dataIn) {
+        JSONObject elderJson = dataIn.getJSONObject("elder");
+        ElderDto elder = JSON.toJavaObject(elderJson, ElderDto.class);
         ElderDto result = elderService.updateElder(elderId, elder);
         JSONObject json = new JSONObject();
         json.put("elder", result);
