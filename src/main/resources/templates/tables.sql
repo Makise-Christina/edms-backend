@@ -269,7 +269,9 @@ CREATE TABLE activity (
     `place` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '活动地点',
     `brief` TEXT COMMENT '活动简介',
     `worker_id` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '联系人id',
+    `status` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '活动进行状态 0进行中 1已完成 2已取消',
 
+    `need_apply` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否需要预约',
     `max_person` INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '最大人数',
     `start_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
     `end_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '结束时间',
