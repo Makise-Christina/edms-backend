@@ -94,6 +94,27 @@ public class UserService {
         return result;
     }
 
+    public List<UserDto> findUsersByDepartmentId(Long departmentId) {
+        List<UserDto> result = new ArrayList<>();
+        List<User> dataRs = new ArrayList<>();
+        User example = new User();
+        example.setDepartmentId(departmentId);
+        dataRs = userRepository.findAll(Example.of(example));
+
+        for (int i = 0; i < dataRs.size(); i++) {
+            User user = dataRs.get(i);
+            UserDto t = new UserDto();
+            DataUtils.copyProperties(user, t);
+            t.setUsername(user.getUserName());
+            t.setIsBlock(user.getLocked());
+            t.setLastLoginTime(user.getLoginTime());
+            t.setSalt(null);
+            t.setPassword(null);
+            result.add(t);
+        }
+        return result;
+    }
+
     public Boolean changeUser(Long userId, UserDto user) {
         User dataIn = userRepository.findUserById(userId);
         if (dataIn == null) {
