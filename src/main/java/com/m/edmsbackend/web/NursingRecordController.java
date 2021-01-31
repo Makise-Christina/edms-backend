@@ -41,7 +41,7 @@ public class NursingRecordController {
     }
 
     @RequestMapping(value = "/nursing-record/{nursingRecordId}", method = RequestMethod.GET)
-    public JSONObject getBuildingAvailableInfos(@PathVariable Long nursingRecordId) {
+    public JSONObject getNursingRecord(@PathVariable Long nursingRecordId) {
         NursingRecordDto result = nursingRecordService.getNursingRecord(nursingRecordId);
         JSONObject json = new JSONObject();
         json.put("record", result);

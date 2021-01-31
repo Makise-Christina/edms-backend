@@ -41,7 +41,7 @@ public class AccessRecordController {
     }
 
     @RequestMapping(value = "/access-record/{accessRecordId}", method = RequestMethod.GET)
-    public JSONObject getBuildingAvailableInfos(@PathVariable Long accessRecordId) {
+    public JSONObject getAccessRecord(@PathVariable Long accessRecordId) {
         AccessRecordDto result = accessRecordService.getAccessRecord(accessRecordId);
         JSONObject json = new JSONObject();
         json.put("record", result);

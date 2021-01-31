@@ -304,3 +304,21 @@ CREATE TABLE task (
 
      PRIMARY KEY (`id`)
 )ENGINE=InnoDB COMMENT='待办事项';
+
+-- 16 销售记录
+CREATE TABLE sales_record (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `gmt_create` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `gmt_modified` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+
+    `elder_name` CHAR(20) NOT NULL COMMENT '姓名',
+    `date` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+    `phone_number` CHAR(32) COMMENT '电话',
+    `demand` TEXT COMMENT '家属要求',
+    `move_in` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否入住 0否 1是 2未确认',
+    `return_visit_record` TEXT COMMENT '入院前情况记录',
+
+    `sales_person_id` BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'id',
+
+     PRIMARY KEY (`id`)
+)ENGINE=InnoDB COMMENT='销售记录';
