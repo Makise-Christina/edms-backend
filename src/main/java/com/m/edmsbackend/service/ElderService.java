@@ -52,6 +52,23 @@ public class ElderService {
         return result;
     }
 
+    public ElderDto getElder(Long elderId) {
+        Elder elder = elderRepository.findElderById(elderId);
+        ElderDto elderDto = new ElderDto();
+        DataUtils.copyProperties(elder, elderDto);
+
+        //add contact list
+        List<ContactDto> contactList = new ArrayList<>();
+        List<Contact> contacts = contactRepository.findContactsByElderId(elderDto.getId());
+        for (Contact contact : contacts) {
+            ContactDto contactDto = new ContactDto();
+            DataUtils.copyProperties(contact, contactDto);
+            contactList.add(contactDto);
+        }
+        elderDto.setContactList(contactList);
+        return elderDto;
+    }
+
     public List<ElderDto> getElders(
         String name,
         Integer gender,
