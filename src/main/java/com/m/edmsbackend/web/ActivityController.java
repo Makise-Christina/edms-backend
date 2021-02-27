@@ -85,6 +85,14 @@ public class ActivityController {
         return StdResult.genResult(true, json);
     }
 
+    @RequestMapping(value = "/activity/{activityId}/elder/count", method = RequestMethod.GET)
+    public JSONObject getRegisteredEldersCount(@PathVariable Long activityId) {
+        List<Long> elderIds = activityService.getActivityRegisteredElderIds(activityId);
+        JSONObject json = new JSONObject();
+        json.put("count", elderIds.size());
+        return StdResult.genResult(true, json);
+    }
+
     @RequestMapping(value = "/activity", method = RequestMethod.GET)
     public JSONObject getActivities(@RequestParam List<Integer> statusList) {
         List<ActivityDto> activityDtos = activityService.getActivitiesByStatus(statusList);
