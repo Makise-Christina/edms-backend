@@ -1,0 +1,1 @@
+ nohup java -jar edms-backend-0.0.1-SNAPSHOT.jar > /opt/edms-backend/backend_out.log &

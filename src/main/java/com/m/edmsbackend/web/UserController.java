@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import com.m.edmsbackend.dto.UserDto;
+import com.m.edmsbackend.dto.UserConfigDto;
 import com.m.edmsbackend.enums.StdStatus;
 import com.m.edmsbackend.exception.AuthorizationException;
 import com.m.edmsbackend.exception.LoginException;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSON;
 
 @RestController
 public class UserController {
@@ -45,14 +48,17 @@ public class UserController {
         return StdResult.genResult(true, json);
     }
 
-    // @Transactional
-    // @RequestMapping(value = "/users_add", method = RequestMethod.POST)
-    // public JSONObject addUser(@RequestBody UserDto user) {
-    //     Long id = userService.addUser(user);
-    //     JSONObject json = new JSONObject();
-    //     json.put("user_id", id);
-    //     return StdResult.genResult(true, json);
-    // }
+    @Transactional
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    public JSONObject addUser(@RequestBody JSONObject dataIn) {
+        JSONObject userJson = dataIn.getJSONObject("user");
+        UserDto user = JSON.toJavaObject(userJson, UserDto.class);
+        Long id = userService.addUser(user);
+        user.setId(id);
+        JSONObject json = new JSONObject();
+        json.put("user", user);
+        return StdResult.genResult(true, json);
+    }
 
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     public JSONObject getUser(@PathVariable Long userId) {
@@ -68,13 +74,29 @@ public class UserController {
         
     }
 
-    // @Transactional
-    // @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT)
-    // public JSONObject changeUser(@PathVariable Long userId, @RequestBody UserDto user) {
-    //     Boolean result = userService.changeUser(userId, user);
-    //     JSONObject json = new JSONObject();
-    //     return StdResult.genResult(result, json);
-    // }
+    @Transactional
+    @RequestMapping(value = "/user/{userId}", method = RequestMethod.PUT)
+    public JSONObject changeUser(@PathVariable Long userId, @RequestBody JSONObject dataIn) {
+        JSONObject userJson = dataIn.getJSONObject("user");
+        UserDto user = JSON.toJavaObject(userJson, UserDto.class);
+        Boolean result = userService.changeUser(userId, user);
+        JSONObject json = new JSONObject();
+        json.put("user", user);
+        return StdResult.genResult(result, json);
+    }
+
+    @Transactional
+    @RequestMapping(value = "/user/{userId}/password", method = RequestMethod.PUT)
+    public JSONObject changeUserPassword(@PathVariable Long userId, @RequestBody JSONObject dataIn) {
+        String oldPassword = dataIn.getString("oldPassword");
+        String newPassword = dataIn.getString("newPassword");
+        Boolean result = userService.updateUserPassword(userId, oldPassword, newPassword);
+        JSONObject json = new JSONObject();
+        json.put("result", result);
+        return StdResult.genResult(result, json);
+    }
+
+    
 
     // @Transactional
     // @RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
@@ -91,7 +113,7 @@ public class UserController {
      * @return
      */
     @Transactional
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     public JSONObject userLogin(@RequestBody UserDto user) {
         // 查找用户
         if (user.getUsername() == null || user.getPassword() == null) {
@@ -105,6 +127,25 @@ public class UserController {
         } catch (Exception e) {
             return StdResult.genResult(false, new JSONObject());
         }
+    }
+
+    @RequestMapping(value = "/user/{userId}/config", method = RequestMethod.GET)
+    public JSONObject getUserConfig(@PathVariable Long userId) {
+        UserConfigDto userConfigDto = userService.getUserConfig(userId);
+        JSONObject json = new JSONObject();
+        json.put("config", userConfigDto);
+        return StdResult.genResult(true, json);
+    }
+
+    @Transactional
+    @RequestMapping(value = "/user/{userId}/config", method = RequestMethod.PUT)
+    public JSONObject changeUserConfig(@PathVariable Long userId, @RequestBody JSONObject dataIn) {
+        JSONObject userConfigJson = dataIn.getJSONObject("config");
+        UserConfigDto userConfig = JSON.toJavaObject(userConfigJson, UserConfigDto.class);
+        Boolean result = userService.changeUserConfig(userId, userConfig);
+        JSONObject json = new JSONObject();
+        json.put("config", userConfig);
+        return StdResult.genResult(result, json);
     }
 
     // /**

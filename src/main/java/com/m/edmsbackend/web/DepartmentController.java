@@ -6,10 +6,12 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import com.m.edmsbackend.dto.UserDto;
+import com.m.edmsbackend.dto.DepartmentDto;
 import com.m.edmsbackend.enums.StdStatus;
 import com.m.edmsbackend.exception.AuthorizationException;
 import com.m.edmsbackend.exception.LoginException;
 import com.m.edmsbackend.service.UserService;
+import com.m.edmsbackend.service.DepartmentService;
 import com.m.edmsbackend.utils.StdResult;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -27,12 +29,30 @@ import com.alibaba.fastjson.JSONArray;
 public class DepartmentController {
     @Resource
     private UserService userService;
+    @Resource
+    private DepartmentService departmentService;
 
     @RequestMapping(value = "/department/{departmentId}/workers", method = RequestMethod.GET)
     public JSONObject getDepartmentWorkers(@PathVariable Long departmentId) {
         List<UserDto> result = userService.findUsersByDepartmentId(departmentId);
         JSONObject json = new JSONObject();
         json.put("userList", result);
+        return StdResult.genResult(true, json);
+    }
+
+    @RequestMapping(value = "/department/{departmentId}", method = RequestMethod.GET)
+    public JSONObject getDepartmentById(@PathVariable Long departmentId) {
+        DepartmentDto departmentDto = departmentService.findDepartment(departmentId);
+        JSONObject json = new JSONObject();
+        json.put("department", departmentDto);
+        return StdResult.genResult(true, json);
+    }
+
+    @RequestMapping(value = "/department", method = RequestMethod.GET)
+    public JSONObject getDepartmentList() {
+        List<DepartmentDto> departmentDtos = departmentService.findDepartments();
+        JSONObject json = new JSONObject();
+        json.put("departmentList", departmentDtos);
         return StdResult.genResult(true, json);
     }
 }

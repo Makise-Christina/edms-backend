@@ -9,10 +9,13 @@ import javax.annotation.Resource;
 
 import com.alibaba.fastjson.JSONObject;
 import com.m.edmsbackend.dao.IUserRepository;
+import com.m.edmsbackend.dao.IUserConfigRepository;
 import com.m.edmsbackend.dto.UserDto;
+import com.m.edmsbackend.dto.UserConfigDto;
 import com.m.edmsbackend.exception.LoginException;
 import com.m.edmsbackend.exception.ServerErrorException;
 import com.m.edmsbackend.model.User;
+import com.m.edmsbackend.model.UserConfig;
 import com.m.edmsbackend.utils.DataUtils;
 import com.m.edmsbackend.utils.JwtUtils;
 import com.m.edmsbackend.utils.RedisUtils;
@@ -26,6 +29,8 @@ import org.springframework.util.DigestUtils;
 public class UserService {
     @Resource
     private IUserRepository userRepository;
+    @Resource
+    private IUserConfigRepository userConfigRepository;
 
     @Resource
     private RedisUtils redisUtils;
@@ -253,5 +258,29 @@ public class UserService {
         } catch (Exception ex) {
             throw new ServerErrorException();
         }
+    }
+
+    public UserConfigDto getUserConfig(Long userId) {
+        UserConfig dataRs = userConfigRepository.findUserConfigByUserId(userId);
+        if (dataRs == null) {
+            return new UserConfigDto();
+        }
+        UserConfigDto result = new UserConfigDto();
+        DataUtils.copyProperties(dataRs, result);
+        return result;
+    }
+
+    public Boolean changeUserConfig(Long userId, UserConfigDto userConfigDto) {
+        UserConfig dataRs = userConfigRepository.findUserConfigByUserId(userId);
+        if (dataRs == null) {
+            return false;
+        }
+        Long id = dataRs.getId();
+        userConfigDto.setId(id);
+        userConfigDto.setUserId(userId);
+        UserConfig userConfig = new UserConfig();
+        DataUtils.copyProperties(userConfigDto, userConfig);
+        userConfigRepository.save(userConfig);
+        return true;
     }
 }

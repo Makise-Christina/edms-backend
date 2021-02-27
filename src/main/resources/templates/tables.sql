@@ -34,6 +34,27 @@ CREATE TABLE user (
 
 )ENGINE=InnoDB COMMENT='用户';
 
+CREATE TABLE user_config (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `gmt_create` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+
+    `enable_check_attendance_nootification` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否开启上下班提醒',
+    `enable_check_attendance_nootification_hour` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '上下班提醒时间',
+    `enable_check_attendance_nootification_minute` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '上下班提醒时间',
+
+    `enable_push_task_notification` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否开启app推送提醒',
+    `enable_push_task_notification_hour` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'app推送提醒时间',
+    `enable_push_task_notification_minute` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'app推送提醒时间',
+
+    `enable_in_progress_task_notification` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否开启未完成任务提醒',
+    `enable_in_progress_task_notification_hour` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '未完成任务提醒时间',
+    `enable_in_progress_task_notification_minute` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '未完成任务提醒时间',
+
+    `user_id` BIGINT UNSIGNED NOT NULL COMMENT '用户id',
+
+    PRIMARY KEY (`id`)
+)ENGINE=InnoDB COMMENT='用户设置';
+
 INSERT INTO user (
     `uuid`,
     `user_name`,
@@ -49,6 +70,13 @@ VALUES (
     1,
     'PHJMBYkR6LGik/BzZkhJ',
     '25e29ee799820aaa8b6e8298e7aacc40'
+);
+
+INSERT INTO user_config (
+    `user_id`
+)
+VALUES (
+    1
 );
 
 -- 02 部门
