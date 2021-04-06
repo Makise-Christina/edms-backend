@@ -9,5 +9,6 @@ import lombok.Data;
 
 @Data
 public class ItemDto extends Item {
+    private Item item;
     private List<WarehouseRecordDto> recordList;
 }

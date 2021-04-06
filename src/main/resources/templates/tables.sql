@@ -38,9 +38,9 @@ CREATE TABLE user_config (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
     `gmt_create` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 
-    `enable_check_attendance_nootification` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否开启上下班提醒',
-    `enable_check_attendance_nootification_hour` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '上下班提醒时间',
-    `enable_check_attendance_nootification_minute` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '上下班提醒时间',
+    `enable_check_attendance_notification` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否开启上下班提醒',
+    `enable_check_attendance_notification_hour` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '上下班提醒时间',
+    `enable_check_attendance_notification_minute` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '上下班提醒时间',
 
     `enable_push_task_notification` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否开启app推送提醒',
     `enable_push_task_notification_hour` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'app推送提醒时间',
@@ -61,7 +61,8 @@ INSERT INTO user (
     `name`,
     `role`,
     `salt`,
-    `password`
+    `password`,
+    `department_id`
 )
 VALUES (
     'abcd@1234',
@@ -69,7 +70,8 @@ VALUES (
     'test_user_01',
     1,
     'PHJMBYkR6LGik/BzZkhJ',
-    '25e29ee799820aaa8b6e8298e7aacc40'
+    '25e29ee799820aaa8b6e8298e7aacc40',
+    1
 );
 
 INSERT INTO user_config (
@@ -91,6 +93,8 @@ CREATE TABLE department (
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB COMMENT='部门';
 
+INSERT INTO department (`name`,`leader_id`) VALUES ('销售',1);
+INSERT INTO department (`name`,`leader_id`) VALUES ('库房',1);
 
 -- 03 客户老人对象
 CREATE TABLE elder (
@@ -332,8 +336,8 @@ CREATE TABLE task (
     `status` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '完成状态 0UNDONE 1FINISHED 2CANCELED',
     `type` TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '类型',
 
-    `finished_times` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '完成时间',
-    `expected_times` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '预计时间',
+    `finished_times` INT DEFAULT 0 COMMENT '完成次数',
+    `expected_times` INT DEFAULT 0 COMMENT '预计次数',
 
      PRIMARY KEY (`id`)
 )ENGINE=InnoDB COMMENT='待办事项';

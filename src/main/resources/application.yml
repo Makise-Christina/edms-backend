@@ -36,6 +36,10 @@ spring:
     timeout: 10000
     database: 0
 
+logging:
+  level:
+    org.springframework.web: INFO
+
 server:
   port: 9770
 

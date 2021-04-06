@@ -32,6 +32,6 @@ public class Task {
     private Integer status;
     private Integer type;
 
-    private Date finishedTimes;
-    private Date expectedTimes;
+    private Integer finishedTimes;
+    private Integer expectedTimes;
 }

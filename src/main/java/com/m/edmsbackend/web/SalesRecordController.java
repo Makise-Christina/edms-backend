@@ -46,7 +46,7 @@ public class SalesRecordController {
         @RequestParam(required = false) Long salesPersonId) {
         List<SalesRecordDto> result = salesRecordService.getSalesRecords(elderName,salesPersonId);
         JSONObject json = new JSONObject();
-        json.put("record", result);
+        json.put("recordList", result);
         return StdResult.genResult(true, json);
     }
 

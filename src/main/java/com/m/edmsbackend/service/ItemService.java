@@ -69,6 +69,7 @@ public class ItemService {
                 recordDtos.add(recordDto);
             }
             itemDto.setRecordList(recordDtos);
+            itemDto.setItem(item);
             itemDtos.add(itemDto);
         }
         
